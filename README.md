@@ -18,7 +18,7 @@ npm install vue-acl --save
 ```
 #### For standalone installation
 
-To install just copy the file `source/vue-acl.js` to your plugins directory.
+To install just copy the file `source/vuex-acl.js` to your plugins directory.
 
 ### Get Started:
 
@@ -26,7 +26,7 @@ To install just copy the file `source/vue-acl.js` to your plugins directory.
 
 ```js
 import Router from '../routes/router'
-import Acl from 'vue-acl'
+import Acl from 'vuex-acl'
 Vue.use( Acl, { router: Router, init: 'public' } )
 ```
 

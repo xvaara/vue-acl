@@ -1,27 +1,28 @@
 {
-  "name": "vue-acl",
+  "name": "vuex-acl",
   "version": "3.0.4",
-  "description": "Plugin of Access Control List from Vue JS 2",
-  "main": "dist/vue-acl.js",
+  "description": "Plugin of Access Control List from Vue JS 2 (using vuex)",
+  "main": "dist/vuex-acl.js",
   "scripts": {
-    "build": "babel ./source/vue-acl.js --out-file ./dist/vue-acl.js"
+    "build": "babel ./source/vuex-acl.js --out-file ./dist/vuex-acl.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/leonardovilarinho/vue-acl.git"
+    "url": "git+https://github.com/xvaara/vuex-acl.git"
   },
   "keywords": [
     "acl",
     "vuejs",
     "control",
-    "user"
+    "user",
+    "vuex"
   ],
-  "author": "Leonardo Vilarinho",
+  "author": "Leonardo Vilarinho & Jukka Raimovaara",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/leonardovilarinho/vue-acl/issues"
+    "url": "https://github.com/xvaara/vuex-acl/issues"
   },
-  "homepage": "https://github.com/leonardovilarinho/vue-acl#readme",
+  "homepage": "https://github.com/xvaara/vuex-acl#readme",
   "devDependencies": {
     "ava": "^0.23.0",
     "babel-cli": "^6.26.0",
