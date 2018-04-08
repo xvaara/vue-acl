@@ -11,7 +11,7 @@ class Acl {
 
     check(permission) {
         
-        if (permission == undefined)
+        if (permission === undefined)
             return false
         this.permissions = this.clearPermissions(this.store.state.acl_current)
         const permissions = (permission.indexOf('|') !== -1) ? permission.split('|') : [permission]
@@ -38,7 +38,7 @@ class Acl {
 
     set router(router) {
         router.beforeEach((to, from, next) => {
-            if(to.meta.permission == 'public')
+            if(to.meta.permission === 'public')
                 return next()
 
             let fail = to.meta.fail || this.fail || from.fullPath

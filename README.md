@@ -27,7 +27,13 @@ To install just copy the file `source/vuex-acl.js` to your plugins directory.
 ```js
 import Router from '../routes/router'
 import Acl from 'vuex-acl'
-Vue.use( Acl, { router: Router, init: 'public' } )
+import Vuex from 'vuex'
+
+const store = new Vuex.Store({
+  state: { acl_current: '' }
+})
+
+Vue.use( Acl, { router: Router, init: 'public', store: store } )
 ```
 
 **[2]:** Add metadata in their routes saying which permission, or group of permissions is required to access the route, use pipe (|) to do an OR check for more than one permission, use (&) to do an AND check for multiple permissions (these can be used in combination for more complex situations). Use the ' fail ' metadata to indicate which this route to redirect on error:
@@ -72,10 +78,6 @@ Vue.use( Acl, { router: Router, init: 'public' } )
 #### Use public fail route
 
 Use `Vue.use( Acl, { router: Router, init: 'public', fail: '/error' } )` to redirect default erros to `/error` route.
-
-#### Save permission to refresh page
-
-Use flag `save` to save permission in SessionStorage, but your app can insecure. Example: `Vue.use( Acl, { router: Router, init: 'public', save: true } )`
 
 
 **[3]:** The components use the global method `$can()` to verify that the system gives access to permission passed by parameter:

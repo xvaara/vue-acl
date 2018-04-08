@@ -25,7 +25,7 @@ var Acl = function () {
         key: 'check',
         value: function check(permission) {
 
-            if (permission == undefined) return false;
+            if (permission === undefined) return false;
             this.permissions = this.clearPermissions(this.store.state.acl_current);
             var permissions = permission.indexOf('|') !== -1 ? permission.split('|') : [permission];
 
@@ -58,7 +58,7 @@ var Acl = function () {
             var _this2 = this;
 
             router.beforeEach(function (to, from, next) {
-                if (to.meta.permission == 'public') return next();
+                if (to.meta.permission === 'public') return next();
 
                 var fail = to.meta.fail || _this2.fail || from.fullPath;
 
