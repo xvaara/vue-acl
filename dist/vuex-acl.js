@@ -15,14 +15,10 @@ var Acl = function () {
 
     _createClass(Acl, [{
         key: 'init',
-        value: function init(router, permissions, fail, save) {
+        value: function init(router, permissions, fail, store) {
             this.router = router;
-            this.save = save;
-            var perms = window.sessionStorage.getItem('vue-acl-permissions');
-            if (perms != null) permissions = atob(perms);
-
+            this.store = store;
             this.permissions = this.clearPermissions(permissions);
-            this.savePermissions();
             this.fail = fail;
         }
     }, {
@@ -30,7 +26,7 @@ var Acl = function () {
         value: function check(permission) {
 
             if (permission == undefined) return false;
-
+            this.permissions = this.clearPermissions(this.store.state.acl_current);
             var permissions = permission.indexOf('|') !== -1 ? permission.split('|') : [permission];
 
             return this.findPermission(permissions) !== undefined;
@@ -55,16 +51,6 @@ var Acl = function () {
             if (permissions.indexOf('&') !== -1) permissions = permissions.split('&');
 
             return Array.isArray(permissions) ? permissions : [permissions];
-        }
-    }, {
-        key: 'savePermissions',
-        value: function savePermissions() {
-            if (this.save != true) return;
-
-            var perm = this.permissions;
-            if (Array.isArray(this.permissions)) perm = this.permissions.join('&');
-
-            window.sessionStorage.setItem('vue-acl-permissions', btoa(perm));
         }
     }, {
         key: 'router',
@@ -92,40 +78,14 @@ Acl.install = function (Vue, _ref) {
     var router = _ref.router,
         init = _ref.init,
         fail = _ref.fail,
-        save = _ref.save;
+        store = _ref.store;
 
 
-    var bus = new Vue();
-
-    acl.init(router, init, fail, save);
+    acl.init(router, init, fail, store);
 
     Vue.prototype.$can = function (permission) {
         return acl.check(permission);
     };
-
-    Vue.mixin({
-        data: function data() {
-            return {
-                access: acl.clearPermissions(init)
-            };
-        },
-
-        watch: {
-            access: function access(value) {
-                acl.permissions = acl.clearPermissions(value);
-                bus.$emit('access-changed', acl.permissions);
-                acl.savePermissions();
-                this.$forceUpdate();
-            }
-        },
-        mounted: function mounted() {
-            var _this3 = this;
-
-            bus.$on('access-changed', function (permission) {
-                return _this3.access = permission;
-            });
-        }
-    });
 };
 
 exports.default = Acl;

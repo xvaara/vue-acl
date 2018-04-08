@@ -2,15 +2,10 @@
 
 class Acl {
 
-    init(router, permissions, fail, save) {
+    init(router, permissions, fail, store) {
         this.router = router
-        this.save = save
-        const perms = window.sessionStorage.getItem('vue-acl-permissions')
-        if(perms != null)
-            permissions = atob(perms)
-
+        this.store = store
         this.permissions = this.clearPermissions(permissions)
-        this.savePermissions()
         this.fail = fail
     }
 
@@ -18,7 +13,7 @@ class Acl {
         
         if (permission == undefined)
             return false
-        
+        this.permissions = this.clearPermissions(this.store.state.acl_current)
         const permissions = (permission.indexOf('|') !== -1) ? permission.split('|') : [permission]
             
         return this.findPermission(permissions) !== undefined;
@@ -41,17 +36,6 @@ class Acl {
         return Array.isArray(permissions) ? permissions : [permissions]
     }
 
-    savePermissions() {
-        if(this.save != true)
-            return
-
-        let perm = this.permissions
-        if (Array.isArray(this.permissions))
-            perm = this.permissions.join('&')
-
-        window.sessionStorage.setItem('vue-acl-permissions', btoa(perm))
-    }
-
     set router(router) {
         router.beforeEach((to, from, next) => {
             if(to.meta.permission == 'public')
@@ -69,32 +53,12 @@ class Acl {
 
 let acl = new Acl()
 
-Acl.install = (Vue, {router, init, fail, save}) => {
+Acl.install = (Vue, {router, init, fail, store}) => {
 
-    const bus = new Vue()
-
-    acl.init(router, init, fail, save)
+    acl.init(router, init, fail, store)
 
     Vue.prototype.$can = (permission) => acl.check(permission)
 
-    Vue.mixin({
-        data() {
-            return {
-                access: acl.clearPermissions(init)
-            }
-        },
-        watch: {
-            access(value) {
-                acl.permissions = acl.clearPermissions(value)
-                bus.$emit('access-changed', acl.permissions)
-                acl.savePermissions()
-                this.$forceUpdate()
-            }
-        },
-        mounted() {
-            bus.$on('access-changed', (permission) => this.access = permission)
-        }
-    })
 }
 
 export default Acl
