@@ -30,7 +30,14 @@ import Acl from 'vuex-acl'
 import Vuex from 'vuex'
 
 const store = new Vuex.Store({
-  state: { acl_current: '' }
+  state: { acl_current: [] }
+  getters: {
+      aclLoaded(state) {
+        return () => {
+          return state.acl_current.length !== 0
+        }
+      }
+  }
 })
 
 Vue.use( Acl, { router: Router, init: 'public', store: store } )

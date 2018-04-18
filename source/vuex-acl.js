@@ -43,10 +43,14 @@ class Acl {
 
             let fail = to.meta.fail || this.fail || from.fullPath
 
-            if (!this.check(to.meta.permission))
-                return next(fail)
-
-            return next()
+            if (this.store.state.acl_current.length === 0) {
+                const watcher = this.store.watch(this.store.getters.aclLoaded, acl => {
+                    watcher()
+                    if (!this.check(to.meta.permission)) return next(fail)
+                    else return next()
+                })
+            } else if (!this.check(to.meta.permission)) return next(fail)
+            else return next()
         })
     }
 }
